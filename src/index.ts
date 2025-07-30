@@ -146,6 +146,7 @@ const questionAnswer = async (question: string) => {
 
 import infoGatheringRouter from "./modules/InfoGathering/Controller";
 import adminRouter from "./modules/Admin/route";
+import communicateRouter from "./modules/Communicate/Route";
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../uploads")));
@@ -158,6 +159,7 @@ cloudinary.config({
 
 app.use("/chatbot/api/v1/info", infoGatheringRouter);
 app.use("/chatbot/api/v1/admin", adminRouter);
+app.use("/chatbot/api/v1/communicate", communicateRouter);
 // readFromPdf()
 // const answer = questionAnswer("share social media links").then((data) => {
 //   console.log(data, "data");
