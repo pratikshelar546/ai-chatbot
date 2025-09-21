@@ -7,6 +7,8 @@ import { authenticateUser } from "../../middleware/verifyUser";
 import fs from "fs";
 import PdfParse from "pdf-parse";
 import { readFromPdf } from "./aiLogic";
+import extractTextFromUrl from "../../utils/ExtractPlainText";
+import addKnowledgeBaseToDB from "../../Ai_service/knowledgeBase/AddKnowledgeBase";
 
 const router = Router();
 const service = new InfoGatheringService();
@@ -50,7 +52,7 @@ router.post(
   async (req: RequestWithFile, res: Response) => {
     try {
       if (!req.file) {
-        return res.status(400).json({ message: "No document file uploaded" });
+        return res.status(400).json({ message: "No document file uploaded",success:false });
       }
 
       const result = await cloudinary.uploader.upload(req.file.path, {
@@ -85,9 +87,29 @@ router.post(
         message: `Error uploading file: ${
           error instanceof Error ? error.message : "Unknown error"
         }`,
+        success:false
       });
     }
   }
 );
+
+router.post("/extractTextFromUrl", async (req: Request, res: Response) => {
+  try {
+    const { url } = req.body;
+    
+    const plainText = await extractTextFromUrl(url);
+    if(!plainText){
+      return res.status(400).json({ message: "Error extracting text from url",success:false });
+    }
+    const addKnowledgeBaseToDBResult = await addKnowledgeBaseToDB(plainText,url);
+   
+    return res.status(200).json({ message: "Knowledge base added successfully", addKnowledgeBaseToDBResult ,success:true});
+    
+    // res.status(200).json({ plainText });
+  } catch (error) {
+    console.log(error,"error");
+    res.status(500).json({ message: "Error extracting text from url",success:false });
+  }
+});
 
 export default router;
