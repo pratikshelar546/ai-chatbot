@@ -1,22 +1,24 @@
-export interface DataItem {
-  id: string;
-  title: string;
-  content: string;
-  category: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import mongoose from "mongoose";
 
-export interface DocumentRequest {
-  format: "pdf" | "word";
-  dataIds?: string[];
-  category?: string;
-  includeMetadata?: boolean;
-}
+const knowledgeBaseSchema = new mongoose.Schema({
+source:{
+    type:String,
+    required:true
+},
+content:{
+    type:String,
+    required:true
+},
+isDeleted:{
+    type:Boolean,
+    default:false
+},
+title:{
+    type:String,
 
-export interface DocumentResponse {
-  success: boolean;
-  message: string;
-  downloadUrl?: string;
-  fileName?: string;
 }
+},{
+    timestamps:true
+})
+
+export const knowledgeBaseModel = mongoose.model("KnowledgeBase", knowledgeBaseSchema);

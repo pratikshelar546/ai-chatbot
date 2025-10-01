@@ -13,13 +13,12 @@ export const vectorRetrival = async (question:string)=>{
             {
               url: process.env.QDRANT_URL || "http://localhost:6333",
               collectionName: 'systemdesign',
-              contentPayloadKey: "text",
-              metadataPayloadKey: "documentId",
+              contentPayloadKey: "data",
+              metadataPayloadKey: "url",
             }
           );
           const retrival = vectorStore.asRetriever(4);
           const embeddings = await retrival.invoke(question);
-          console.log(embeddings,"embeddings");
           
           return embeddings.map(doc => doc.pageContent).join("\n---\n");
     } catch (error) {

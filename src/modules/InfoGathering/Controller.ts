@@ -101,6 +101,7 @@ router.post("/extractTextFromUrl", async (req: Request, res: Response) => {
     if(!plainText){
       return res.status(400).json({ message: "Error extracting text from url",success:false });
     }
+    
     const addKnowledgeBaseToDBResult = await addKnowledgeBaseToDB(plainText,url);
    
     return res.status(200).json({ message: "Knowledge base added successfully", addKnowledgeBaseToDBResult ,success:true});

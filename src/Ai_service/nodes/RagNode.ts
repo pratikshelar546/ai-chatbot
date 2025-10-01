@@ -26,8 +26,18 @@ try {
         }
     ]
 
-    const response = await llm.invoke(message);    
-    return {response:response.content}
+    const response = await llm.invoke(message);
+    
+    const messages = [
+    {
+        role:"user",
+        question:question
+    },{
+        role:"bot",
+        response:response.content
+    }
+    ]
+    return {response:response.content,messages:messages}
 } catch (error) {
     console.log(error,"error in ragNode",error);
     return error

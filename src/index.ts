@@ -5,10 +5,20 @@ import path from "path";
 import adminRouter from "./modules/Admin/route";
 import communicateRouter from "./modules/Communicate/Route";
 import infoGatheringRouter from "./modules/InfoGathering/Controller";
+import db from "./database/client";
 import cors from "cors";
 dotenv.config();
+
+try {
+  db.on('error', console.error.bind(console, 'connection error:'));
+  db.once('open', function callback() {
+    console.log('Successfully Connected to DB!!!');
+  });
+} catch (error) {
+  console.log(error);
+}
 const app = express();
-const port = 5001;
+const port = 5002;
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../uploads")));

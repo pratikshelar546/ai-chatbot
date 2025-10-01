@@ -18,6 +18,7 @@ export const createUser = async (
 ): Promise<any> => {
   try {
     const { email, name, phoneNumber, password }: User = req.body;
+console.log(email,name,phoneNumber,password,"email from fuck");
 
     const userAlreadyExits = await findEmailAlreadyExist(email);
     if (userAlreadyExits)
