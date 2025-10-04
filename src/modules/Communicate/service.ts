@@ -117,3 +117,14 @@ export const storeChat = async (userId:string,question:string,response:string)=>
     throw error;
   }
 }
+
+export const fetchAllChat = async(userId:string)=>{
+  try {
+    const chats = Chat.findOne({
+      userId:userId
+    })
+    return chats;
+  } catch (error:any) {
+    throw error;
+  }
+}

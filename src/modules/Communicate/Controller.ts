@@ -1,12 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 import { getResponse } from "../../Ai_service";
-import { responseUserQuestion, storeChat } from "./service";
+import { fetchAllChat, responseUserQuestion, storeChat } from "./service";
 
 export const askQuestion = async (req: Request, res: Response) => {
   try {
     const { question } = req.body;
-    console.log(question,"question");
 const userId = req.body.userId || "68dd809bb902f94db3ace1fc";
     
 
@@ -20,7 +19,7 @@ const userId = req.body.userId || "68dd809bb902f94db3ace1fc";
     // });
     // const updatedQuestion = JSON.parse(question)
    const reposne = await responseUserQuestion(question) as {response:string};
-   console.log(reposne,"reposne from fuck");
+
    
    await storeChat(userId,question,reposne.response);
    
@@ -34,3 +33,20 @@ const userId = req.body.userId || "68dd809bb902f94db3ace1fc";
     });
   }
 }
+
+
+export const fetchChats = async (req:Request,res:Response,next:NextFunction)=>{
+  try {
+    const {userId} = req.params;
+  
+    const allChats = await fetchAllChat(userId);
+
+    return res.status(200).json({
+      message:"chats fetched",
+      chats:allChats,
+      success:true
+    })
+  } catch (error) {
+    next(error);
+  }
+  }
